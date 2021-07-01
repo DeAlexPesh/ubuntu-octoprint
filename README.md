@@ -1,117 +1,110 @@
 ## Ubuntu OCTOPRINT (Python3)
 
-<pre><code>sudo apt -y update && \
-sudo apt -y dist-upgrade && \
-sudo apt -y install net-tools rfkill wireless-tools network-manager && \
+<pre>sudo apt -y update && sudo apt -y dist-upgrade
+
+sudo apt -y install net-tools rfkill wireless-tools network-manager
+sudo apt -y install git libyaml-dev build-essential
 sudo apt -y install virtualbox-guest-additions-iso
-</code></pre>
+</pre>
 
-- ### WiFi Driver install
+- #### Wi-Fi drivers
 
-<pre><code>lspci -knn | grep Net -A2 && sudo update-pciids
+<pre>lspci -knn | grep Net -A2
+sudo update-pciids
 
-</code></pre>
+# BCM4312
+sudo apt install firmware-b43-installer -y && sudo reboot now
 
-#### BCM4312
+sudo rfkill list all 
+sudo rfkill unblock all
 
-<pre><code>sudo apt install firmware-b43-installer -y && sudo reboot now
+iwconfig
+</pre>
 
-</code></pre>
+- #### Wi-Fi connection
 
-<pre><code>sudo rfkill list all && sudo rfkill unblock all && iwconfig
+<pre>nmcli d
+nmcli r wifi on
+nmcli d wifi list
 
-</code></pre>
-
-- ### WiFi connection
-
-<pre><code>nmcli d && \
-nmcli r wifi on && \
-nmcli d wifi list && \
 read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
-</code></pre>
-
-- ### Case settings (for notebook)
-
-<pre><code>sudo apt install pm-utils
-sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
-sudo nano /etc/systemd/logind.conf
-</code></pre>
-
-<pre><i>man logind.conf</i>
-HandleLidSwitch=ignore
 </pre>
 
-<pre><code>sudo systemctl restart systemd-logind.service
+- #### Case settings (notebooks)
 
-</code></pre>
+<pre># man logind.conf 
+sudo apt -y install pm-utils && \
+sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back && \
+sudo nano /etc/systemd/logind.conf
 
-- ### OCTOPRINT install
+<i>HandleLidSwitch=ignore</i>
 
-<pre><code>sudo apt -y install python3-pip python3-dev python3-setuptools python3-virtualenv python3-venv && \
-sudo apt -y install git libyaml-dev build-essential
-</code></pre>
+sudo systemctl restart systemd-logind.service
+</pre>
 
-<pre><code>sudo useradd -m -d /opt/octoprint -s /bin/bash octoprint && \
+- #### OCTOPRINT install ( http://ip:5000 )
+
+<pre>sudo apt -y install python3-pip python3-dev python3-setuptools python3-virtualenv python3-venv
+
+sudo useradd -m -d /opt/octoprint -s /bin/bash octoprint && \
 sudo usermod -a -G tty octoprint && \
 sudo usermod -a -G dialout octoprint && \
 sudo su - octoprint
-</code></pre>
 
-<pre><code>virtualenv --python=/usr/bin/python3 venv3 && \
-source venv3/bin/activate && \
-pip install pip --upgrade && \
-pip install OctoPrint && \
+virtualenv --python=/usr/bin/python3 venv3
+source venv3/bin/activate
+pip install pip --upgrade
+pip install OctoPrint
 exit
-</code></pre>
+</pre>
 
-- ### OCTOPRINT actions
+- #### OCTOPRINT actions
 
-> REBOOT: sudo shutdown -r now
+`REBOOT:       sudo shutdown -r now`
 
-> SHUTDOWN: sudo shutdown -h now
+`SHUTDOWN:     sudo shutdown -h now`
 
-> OCTORESTART: sudo service octoprint restart
+`OCTORESTART:  sudo service octoprint restart`
 
-<pre><code>sudo visudo -f /etc/sudoers.d/octoprint-shutdown
-</code></pre>
-<pre><code>octoprint ALL=NOPASSWD:/sbin/shutdown
+<pre>sudo visudo -f /etc/sudoers.d/octoprint-shutdown
+<i>
+octoprint ALL=NOPASSWD:/sbin/shutdown
 octo ALL=NOPASSWD:/sbin/shutdown
-</code></pre>
+</i></pre>
 
-<pre><code>sudo visudo -f /etc/sudoers.d/octoprint-service
-</code></pre>
-<pre><code>octoprint ALL=NOPASSWD:/usr/sbin/service octoprint restart
+<pre>sudo visudo -f /etc/sudoers.d/octoprint-service
+<i>
+octoprint ALL=NOPASSWD:/usr/sbin/service octoprint restart
 octo ALL=NOPASSWD:/usr/sbin/service octoprint restart
-</code></pre>
+</i></pre>
 
-<pre><code>wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init && \
+<pre># https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init
+wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init && \
 sudo mv octoprint.init /etc/init.d/octoprint
-</code></pre>
+</pre>
 
-<pre><code>wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default && \
+<pre># https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default
+wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default && \
 sudo mv octoprint.default /etc/default/octoprint
-</code></pre>
+</pre>
 
-<pre><code>sudo nano /etc/default/octoprint
-</code></pre>
-
-<pre><code>OCTOPRINT_USER=octoprint
+<pre>sudo nano /etc/default/octoprint
+<i>
+OCTOPRINT_USER=octoprint
 BASEDIR=/opt/octoprint/.octoprint
 CONFIGFILE=/opt/octoprint/.octoprint/config.yaml
 DAEMON=/opt/octoprint/venv3/bin/octoprint
-</code></pre>
+</i></pre>
 
-<pre><code>sudo chmod +x /etc/init.d/octoprint
-sudo update-rc.d octoprint defaults
+<pre>sudo chmod +x /etc/init.d/octoprint && \
+sudo update-rc.d octoprint defaults && \
 sudo service octoprint start
-</code></pre>
+</pre>
 
-> http://ip:5000
-
-- ### OCTOPRINT plugins
+- #### OCTOPRINT plugins
 
 <pre>sudo su - octoprint
 source venv/bin/activate
