@@ -2,8 +2,7 @@
 
 <pre>sudo apt -y update && sudo apt -y dist-upgrade
 
-sudo apt -y install net-tools rfkill wireless-tools network-manager
-sudo apt -y install git libyaml-dev build-essential
+sudo apt -y install net-tools wireless-tools network-manager rfkill git libyaml-dev build-essential
 sudo apt -y install virtualbox-guest-additions-iso
 </pre>
 
@@ -63,17 +62,16 @@ exit
 
 - #### OCTOPRINT actions
 
-`REBOOT:       sudo shutdown -r now`
-
+`REBOOT:       sudo shutdown -r now`</br>
 `SHUTDOWN:     sudo shutdown -h now`
-
-`OCTORESTART:  sudo service octoprint restart`
 
 <pre>sudo visudo -f /etc/sudoers.d/octoprint-shutdown
 <i>
 octoprint ALL=NOPASSWD:/sbin/shutdown
 octo ALL=NOPASSWD:/sbin/shutdown
 </i></pre>
+
+`OCTORESTART:  sudo service octoprint restart`
 
 <pre>sudo visudo -f /etc/sudoers.d/octoprint-service
 <i>
@@ -82,11 +80,13 @@ octo ALL=NOPASSWD:/usr/sbin/service octoprint restart
 </i></pre>
 
 <pre># https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init
+
 wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init && \
 sudo mv octoprint.init /etc/init.d/octoprint
 </pre>
 
 <pre># https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default
+
 wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default && \
 sudo mv octoprint.default /etc/default/octoprint
 </pre>
@@ -112,25 +112,31 @@ pip install "https://github.com/.../master.zip"
 exit
 </pre>
 
-- ### OCTOPRINT web-camera
+- #### OCTOPRINT CuraEngine Legacy
 
-<pre><code>sudo apt install snapd -y
+`https://github.com/OctoPrint/OctoPrint-CuraLegacy/archive/master.zip`
+
+<pre>sudo apt install cura-engine
+
+Path: <i>/usr/bin/CuraEngine</i>
+</pre>
+
+- #### OCTOPRINT web-camera
+
+<pre>sudo apt -y install snapd
 sudo nano /etc/environment
-:/snap/bin"
-</code></pre>
+<i>
+:/snap/bin
+</i></pre>
 
-<pre><code>sudo apt install v4l-utils -y
-sudo snap install mjpg-streamer
-sudo snap connect mjpg-streamer:camera
-</code></pre>
+<pre>sudo apt -y install v4l-utils
+sudo snap install mjpg-streamer && sudo snap connect mjpg-streamer:camera
+v4l2-ctl --list-devices
+</pre>
 
-<pre><code>v4l2-ctl --list-devices
-</code></pre>
-
-<pre><code>sudo nano /usr/local/bin/stream.sh && sudo chmod +x /usr/local/bin/stream.sh
-</code></pre>
-
-<pre><code>#!/bin/bash
+<pre>sudo nano /usr/local/bin/stream.sh && sudo chmod +x /usr/local/bin/stream.sh
+<i>
+#!/bin/bash
 RESOLUTION="640x480"
 FRAMERATE="25"
 VIDEO="/dev/video0"
@@ -138,7 +144,6 @@ MJPG_WEB_ROOT="/tmp"
 PORT="8080"
 LISTEN="127.0.0.1"
 DAEMON="mjpg_streamer"
-
 case "$1" in
   start)
     mjpg-streamer -i "input_uvc.so -d $VIDEO -f $FRAMERATE -r $RESOLUTION -yuv" -o "output_http.so -w $MJPG_WEB_ROOT -p $PORT"
@@ -147,12 +152,11 @@ case "$1" in
     pkill -x ${DAEMON}
   ;;
 esac
-</code></pre>
+</i></pre>
 
-<pre><code>sudo nano /etc/systemd/system/stream.service
-</code></pre>
-
-<pre><code>[Unit]
+<pre>sudo nano /etc/systemd/system/stream.service
+<i>
+[Unit]
 Description=Stream
 After=network.target
 
@@ -163,26 +167,27 @@ Restart=on-failure
 
 [Install]
 WantedBy=default.target
-</code></pre>
+</i></pre>
 
-<pre><code>sudo systemctl daemon-reload
-</code></pre>
+<pre>sudo systemctl daemon-reload
+</pre>
 
-<pre><code>sudo visudo -f /etc/sudoers.d/camera-service
-</code></pre>
+`sudo systemctl start stream.service`</br>
+`sudo systemctl status stream.service`
 
-<pre><code>octoprint ALL=NOPASSWD:/usr/sbin/service stream start
+<pre>sudo visudo -f /etc/sudoers.d/camera-service
+<i>
+octoprint ALL=NOPASSWD:/usr/sbin/service stream start
 octoprint ALL=NOPASSWD:/usr/sbin/service stream restart
 octoprint ALL=NOPASSWD:/usr/sbin/service stream stop
 octo ALL=NOPASSWD:/usr/sbin/service stream start
 octo ALL=NOPASSWD:/usr/sbin/service stream restart
 octo ALL=NOPASSWD:/usr/sbin/service stream stop
-</code></pre>
+</i></pre>
 
-<pre><code>sudo nano /opt/octoprint/.octoprint/config.yaml
-</code></pre>
-
-<pre><code>system:
+<pre>sudo nano /opt/octoprint/.octoprint/config.yaml
+<i>
+system:
   actions:
   - name: Camera enable
     action: Camera enable
@@ -192,28 +197,158 @@ octo ALL=NOPASSWD:/usr/sbin/service stream stop
     action: Camera disable
     command: sudo service stream stop
     confirm: false
-</code></pre>
+</i></pre>
 
-<pre><code>sudo reboot now
-</code></pre>
+<pre>sudo reboot now
+</pre>
 
-> http://octoprint:8080/?action=stream
-> http://octoprint:8080/?action=snapshot
+`http://octoprint:8080/?action=stream`</br>
+`http://octoprint:8080/?action=snapshot`
 
-<pre><code>
-</code></pre>
+- #### OCTOPRINT gcodes
 
-<pre><code>
-</code></pre>
+<details>
+<summary>BEFORE PRINT JOB STARTS</summary>
+<pre><i>M300 S200 P100
+</i></pre>
+</details>
 
-<pre><code>
-</code></pre>
+<details>
+<summary>AFTER PRINT JOB COMPLETES</summary>
+<pre><i>M300 S200 P100
+</i></pre>
+</details>
 
-<pre><code>
-</code></pre>
+<details>
+<summary>AFTER PRINT JOB IS CANCELLED</summary>
+<pre><i>M84 ;Отключить двигатели
+{% snippet 'disable_hotends' %}
+{% snippet 'disable_bed' %}
+M106 S0 ;Выключить обдув
+G90 ;Абсолютные координаты
+G28 X Y ;Парковка
+</i></pre>
+</details>
 
-<pre><code>
-</code></pre>
+<details>
+<summary>AFTER PRINT JOB IS PAUSED</summary>
+<pre><i>{% if pause_position.x is not none %}
+G91 ;Относительные координаты
+M83 ;Относительные координаты экструдера
+G1 Z+5 E-5 F4500 ;Поднятие сопла и ретракт
+M82 ;Абсолютные координаты экструдера
+G90 ;Абсолютные координаты
+G28 X Y ;Парковка
+{% endif %}
+</i></pre>
+</details>
 
-<pre><code>
-</code></pre>
+<details>
+<summary>BEFORE PRINT JOB IS RESUMED</summary>
+<pre><i>{% if pause_position.x is not none %}
+M83 ;Относительные координаты экструдера
+G1 E-5 F4500 ;Ретракт
+G1 E5 F4500 ;Возврат ретракта
+M82 ;Абсолютные координаты экструдера
+G90 ;Абсолютные координаты
+G92 E{{ pause_position.e }} ;Возврат метража
+G1 X{{ pause_position.x }} Y{{ pause_position.y }} Z{{ pause_position.z }} F4500 ;Возврат осей
+{% if pause_position.f is not none %}G1 F{{ pause_position.f }}{% endif %} ;Возврат экструдера
+{% endif %}
+</i></pre>
+</details>
+
+<details>
+<summary>AFTER CONNECTION TO PRINTER IS ESTABLISHED</summary>
+<pre><i>M501 ;Чтение EEPROM
+M300 S200 P100
+</i></pre>
+</details>
+
+<details>
+<summary>BEFORE CONNECTION TO PRINTER IS CLOSED</summary>
+<pre><i>M300 S200 P100
+</i></pre>
+</details>
+
+<details>
+<summary>HOME X Y Z</summary>
+<pre><i>G28 ;Парковка
+M84 ;Отключить моторы
+</i></pre>
+</details>
+
+<details>
+<summary>HOME X Y</summary>
+<pre><i>G28 X Y ;Парковка
+M84 ;Отключить моторы
+</i></pre>
+</details>
+
+<details>
+<summary>PID AUTOTUNE</summary>
+<pre><i>G28 ;Парковка
+G91 ;Относительные координаты
+M83 ;Относительные координаты экструдера
+M104 S220 ;Ожидание нагрева до 220 градусов
+M109 S220 ;Удержание нагрева до 220 градусов
+M106 S160 ;Включить обдув
+G1 Z10 E-5 F4500 ;Поднять ось Z на 10 мм и ретракт
+M400 ;Ожидание завершения
+M303 E0 S230 C8 ;Калибровка экструдера
+M106 S0 ;Выключить обдув
+M303 E-1 S110 C8 ;Калибровка стола
+M500 ;Сохранить в EEPROM
+M82 ;Абсолютные координаты экструдера
+G90 ;Абсолютные координаты
+G28 ;Парковка
+M84 ;Отключить моторы
+M117 Done! ;Вывести текст
+M300 S200 P1000 ;Проиграть звук
+</i></pre>
+</details>
+
+<details>
+<summary>RETRACT</summary>
+<pre><i>G28 ;Парковка
+G91 ;Относительные координаты
+M83 ;Относительные координаты экструдера
+G0 Z5 F4500 ;Поднять ось Z на 5 мм
+M104 S220 ;Ожидание нагрева до 220 градусов
+M109 S220 ;Удержание нагрева до 220 градусов
+G0 E-800 F300 ;Ретракт 800 мм со скоростью 300мм/м
+M400 ;Ожидание завершения
+M104 S0 ;Сброс температуры
+G92 E0 ;Сброс длины
+M82 ;Абсолютные координаты экструдера
+G90 ;Абсолютные координаты
+M117 Done! ;Вывести текст
+M300 S200 P1000 ;Проиграть звук
+</i></pre>
+</details>
+
+<details>
+<summary>EXTRUDE</summary>
+<pre><i>G28 ;Парковка
+G91 ;Относительные координаты
+M83 ;Относительные координаты экструдера
+G0 Z30 F4500 ;Поднять ось Z на 30 мм
+M104 S220 ;Ожидание нагрева до 220 градусов
+M109 S220 ;Удержание нагрева до 220 градусов
+M300 S200 P100 ;Проиграть звук
+M300 S200 P1000
+G4 S10 ;Ожидание 10 секунд
+G0 E800 F300 ;Выдавить 800 мм со скоростью 300мм/м
+M400 ;Ожидание завершения
+M104 S0 ;Сброс температуры
+G92 E0 ;Сброс длины
+M82 ;Абсолютные координаты экструдера
+G90 ;Абсолютные координаты
+M117 Done! ;Вывести текст
+M300 S200 P1000 ;Проиграть звук
+</i></pre>
+</details>
+
+<pre>
+</pre>
+
