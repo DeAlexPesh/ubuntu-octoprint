@@ -400,6 +400,7 @@ alias xs='startx'
 
 <pre>sudo nano ~/.bashrc
 <i>
+...
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
