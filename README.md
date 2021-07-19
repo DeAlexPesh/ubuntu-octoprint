@@ -1,14 +1,14 @@
 ## Ubuntu OCTOPRINT (Python3)
-
-<pre>sudo apt -y update && sudo apt -y dist-upgrade
+```bash
+sudo apt -y update && sudo apt -y dist-upgrade
 
 sudo apt -y install net-tools wireless-tools network-manager rfkill git libyaml-dev build-essential
 sudo apt -y install virtualbox-guest-additions-iso
-</pre>
+```
 
 - #### Wi-Fi drivers
-
-<pre>lspci -knn | grep Net -A2
+```bash
+lspci -knn | grep Net -A2
 sudo update-pciids
 
 # BCM4312
@@ -18,11 +18,11 @@ sudo rfkill list all
 sudo rfkill unblock all
 
 iwconfig
-</pre>
+```
 
 - #### Wi-Fi connection
-
-<pre>nmcli d
+```bash
+nmcli d
 nmcli r wifi on
 nmcli d wifi list
 
@@ -30,59 +30,68 @@ read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
-</pre>
+```
 
 - #### Case settings (notebooks)
-
-<pre># man logind.conf 
+```bash
+# man logind.conf 
 sudo apt -y install pm-utils && \
-sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back && \
-sudo nano /etc/systemd/logind.conf
+sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
+```
+<pre>
+<b>sudo nano /etc/systemd/logind.conf</b>
 
 <i>HandleLidSwitch=ignore</i>
-
-sudo systemctl restart systemd-logind.service
 </pre>
 
-- #### OCTOPRINT install ( http://ip:5000 )
+```bash
+sudo systemctl restart systemd-logind.service
 
-<pre>sudo apt -y install python3-pip python3-dev python3-setuptools python3-virtualenv python3-venv
+
+```
+- #### OCTOPRINT install ( http://ip:5000 )
+```bash
+sudo apt -y install python3-pip python3-dev python3-setuptools python3-virtualenv python3-venv
 
 sudo useradd -m -d /opt/octoprint -s /bin/bash octoprint && \
 sudo usermod -a -G tty octoprint && \
 sudo usermod -a -G dialout octoprint && \
 sudo su - octoprint
-
+```
+```python
 virtualenv --python=/usr/bin/python3 venv3
 source venv3/bin/activate
 pip install pip --upgrade
 pip install OctoPrint
 exit
-</pre>
+```
 
 - #### OCTOPRINT actions
-
-`REBOOT:       sudo shutdown -r now`</br>
-`SHUTDOWN:     sudo shutdown -h now`
-
-<pre>sudo visudo -f /etc/sudoers.d/octoprint-shutdown
+`REBOOT: sudo shutdown -r now`</br>
+`SHUTDOWN: sudo shutdown -h now`
+<pre>
+<b>sudo visudo -f /etc/sudoers.d/octoprint-shutdown</b>
 <i>
 octoprint ALL=NOPASSWD:/sbin/shutdown
 octo ALL=NOPASSWD:/sbin/shutdown
 </i></pre>
 
-`OCTORESTART:  sudo service octoprint restart`
-
-<pre>sudo visudo -f /etc/sudoers.d/octoprint-service
+`OCTORESTART: sudo service octoprint restart`
+<pre>
+<b>sudo visudo -f /etc/sudoers.d/octoprint-service</b>
 <i>
 octoprint ALL=NOPASSWD:/usr/sbin/service octoprint restart
 octo ALL=NOPASSWD:/usr/sbin/service octoprint restart
 </i></pre>
+  
+[`octoprint.default`](https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default)
 
-`https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default`
-<pre>wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default && \
-sudo mv octoprint.default /etc/default/octoprint && \
-sudo nano /etc/default/octoprint
+```bash
+wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.default && \
+sudo mv octoprint.default /etc/default/octoprint
+```
+<pre>
+<b>sudo nano /etc/default/octoprint</b>
 <i>
 OCTOPRINT_USER=octoprint
 BASEDIR=/opt/octoprint/.octoprint
@@ -90,41 +99,48 @@ CONFIGFILE=/opt/octoprint/.octoprint/config.yaml
 DAEMON=/opt/octoprint/venv3/bin/octoprint
 </i></pre>
 
-`https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init`
-<pre>wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init && \
+[`octoprint.init`](https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init)
+
+```bash
+wget https://github.com/foosel/OctoPrint/raw/master/scripts/octoprint.init && \
 sudo mv octoprint.init /etc/init.d/octoprint && \
 sudo chmod +x /etc/init.d/octoprint && \
 sudo update-rc.d octoprint defaults && \
 sudo service octoprint start
-</pre>
+```
 
-- #### OCTOPRINT CuraEngine Legacy
-`https://github.com/OctoPrint/OctoPrint-CuraLegacy/archive/master.zip`
+- #### OCTOPRINT CuraEngine Legacy - [GIT](https://github.com/OctoPrint/OctoPrint-CuraLegacy/archive/master.zip)
+```bash
+sudo apt install cura-engine
 
-<pre>sudo apt install cura-engine
 
-Path: <i>/usr/bin/CuraEngine</i>
-</pre>
+```
+<pre><b>Path:</b> <i>/usr/bin/CuraEngine</i></pre>
 
-- #### OCTOPRINT Macro
-`https://github.com/mike1pol/octoprint_macro/archive/master.zip`
+- #### OCTOPRINT Macro - [GIT](https://github.com/mike1pol/octoprint_macro/archive/master.zip)
 <details>
 <summary>HOME X Y Z</summary>
-<pre><i>G28 ;Парковка
+  
+```gcode
+G28 ;Парковка
 M84 ;Отключить моторы
-</i></pre>
+```
 </details>
 
 <details>
 <summary>HOME X Y</summary>
-<pre><i>G28 X Y ;Парковка
+  
+```gcode
+G28 X Y ;Парковка
 M84 ;Отключить моторы
-</i></pre>
+```
 </details>
 
 <details>
 <summary>PID AUTOTUNE</summary>
-<pre><i>G28 ;Парковка
+  
+```gcode
+G28 ;Парковка
 G91 ;Относительные координаты
 M83 ;Относительные координаты экструдера
 M104 S220 ;Ожидание нагрева до 220 градусов
@@ -142,12 +158,14 @@ G28 ;Парковка
 M84 ;Отключить моторы
 M117 Done! ;Вывести текст
 M300 S200 P1000 ;Проиграть звук
-</i></pre>
+```
 </details>
 
 <details>
 <summary>RETRACT</summary>
-<pre><i>G28 ;Парковка
+  
+```gcode
+G28 ;Парковка
 G91 ;Относительные координаты
 M83 ;Относительные координаты экструдера
 G0 Z5 F4500 ;Поднять ось Z на 5 мм
@@ -161,12 +179,14 @@ M82 ;Абсолютные координаты экструдера
 G90 ;Абсолютные координаты
 M117 Done! ;Вывести текст
 M300 S200 P1000 ;Проиграть звук
-</i></pre>
+```
 </details>
 
 <details>
 <summary>EXTRUDE</summary>
-<pre><i>G28 ;Парковка
+  
+```gcode
+G28 ;Парковка
 G91 ;Относительные координаты
 M83 ;Относительные координаты экструдера
 G0 Z30 F4500 ;Поднять ось Z на 30 мм
@@ -183,29 +203,40 @@ M82 ;Абсолютные координаты экструдера
 G90 ;Абсолютные координаты
 M117 Done! ;Вывести текст
 M300 S200 P1000 ;Проиграть звук
-</i></pre>
+```
 </details>
 
 - #### OCTOPRINT plugins shell install (example)
+```bash
+sudo su - octoprint
 
-<pre>sudo su - octoprint
+
+```
+```python
 source venv/bin/activate
 pip install "https://github.com/.../master.zip"
 exit
-</pre>
+```
 
 - #### OCTOPRINT Web-camera
+```bash
+sudo apt -y install snapd
 
-<pre>sudo apt -y install snapd
-sudo nano /etc/environment
-<i>
-:/snap/bin
-</i>
-sudo snap install mjpg-streamer && sudo snap connect mjpg-streamer:camera
-sudo apt -y install v4l-utils && v4l2-ctl --list-devices
+
+```
+<pre>
+<b>sudo nano /etc/environment</b>
+
+<i>... :/snap/bin</i>
 </pre>
 
-<pre>sudo nano /usr/local/bin/stream.sh && sudo chmod +x /usr/local/bin/stream.sh
+```bash
+sudo snap install mjpg-streamer && sudo snap connect mjpg-streamer:camera
+sudo apt -y install v4l-utils && v4l2-ctl --list-devices
+```
+
+<pre>
+<b>sudo nano /usr/local/bin/stream.sh && sudo chmod +x /usr/local/bin/stream.sh</b>
 <i>
 #!/bin/bash
 RESOLUTION="640x480"
@@ -225,7 +256,8 @@ case "$1" in
 esac
 </i></pre>
 
-<pre>sudo nano /etc/systemd/system/stream.service
+<pre>
+<b>sudo nano /etc/systemd/system/stream.service</b>
 <i>
 [Unit]
 Description=Stream
@@ -240,9 +272,10 @@ Restart=on-failure
 WantedBy=default.target
 </i></pre>
 
-<pre>sudo visudo -f /etc/sudoers.d/camera-service
-<i>
-octoprint ALL=NOPASSWD:/usr/sbin/service stream start
+<pre>
+<b>sudo visudo -f /etc/sudoers.d/camera-service</b>
+
+<i>octoprint ALL=NOPASSWD:/usr/sbin/service stream start
 octoprint ALL=NOPASSWD:/usr/sbin/service stream restart
 octoprint ALL=NOPASSWD:/usr/sbin/service stream stop
 octo ALL=NOPASSWD:/usr/sbin/service stream start
@@ -250,7 +283,8 @@ octo ALL=NOPASSWD:/usr/sbin/service stream restart
 octo ALL=NOPASSWD:/usr/sbin/service stream stop
 </i></pre>
 
-<pre>sudo nano /opt/octoprint/.octoprint/config.yaml
+<pre>
+<b>sudo nano /opt/octoprint/.octoprint/config.yaml</b>
 <i>
 system:
   actions:
@@ -264,8 +298,11 @@ system:
     confirm: false
 </i></pre>
 
-<pre>sudo systemctl daemon-reload && sudo reboot now
-</pre>
+```bash
+sudo systemctl daemon-reload && sudo reboot now
+
+
+```
 
 `http://octoprint:8080/?action=stream`</br>
 `http://octoprint:8080/?action=snapshot`
@@ -274,30 +311,38 @@ system:
 
 <details>
 <summary>BEFORE PRINT JOB STARTS</summary>
-<pre><i>M300 S200 P100
-</i></pre>
+
+```gcode
+M300 S200 P100
+```
 </details>
 
 <details>
 <summary>AFTER PRINT JOB COMPLETES</summary>
-<pre><i>M300 S200 P100
-</i></pre>
+  
+```gcode
+M300 S200 P100
+```
 </details>
 
 <details>
 <summary>AFTER PRINT JOB IS CANCELLED</summary>
-<pre><i>M84 ;Отключить двигатели
+  
+```gcode
+M84 ;Отключить двигатели
 {% snippet 'disable_hotends' %}
 {% snippet 'disable_bed' %}
 M106 S0 ;Выключить обдув
 G90 ;Абсолютные координаты
 G28 X Y ;Парковка
-</i></pre>
+```
 </details>
 
 <details>
 <summary>AFTER PRINT JOB IS PAUSED</summary>
-<pre><i>{% if pause_position.x is not none %}
+
+```gcode
+{% if pause_position.x is not none %}
 G91 ;Относительные координаты
 M83 ;Относительные координаты экструдера
 G1 Z+5 E-5 F4500 ;Поднятие сопла и ретракт
@@ -305,12 +350,14 @@ M82 ;Абсолютные координаты экструдера
 G90 ;Абсолютные координаты
 G28 X Y ;Парковка
 {% endif %}
-</i></pre>
+```
 </details>
 
 <details>
 <summary>BEFORE PRINT JOB IS RESUMED</summary>
-<pre><i>{% if pause_position.x is not none %}
+
+```gcode
+{% if pause_position.x is not none %}
 M83 ;Относительные координаты экструдера
 G1 E-5 F4500 ;Ретракт
 G1 E5 F4500 ;Возврат ретракта
@@ -320,29 +367,34 @@ G92 E{{ pause_position.e }} ;Возврат метража
 G1 X{{ pause_position.x }} Y{{ pause_position.y }} Z{{ pause_position.z }} F4500 ;Возврат осей
 {% if pause_position.f is not none %}G1 F{{ pause_position.f }}{% endif %} ;Возврат экструдера
 {% endif %}
-</i></pre>
+```
 </details>
 
 <details>
 <summary>AFTER CONNECTION TO PRINTER IS ESTABLISHED</summary>
-<pre><i>M501 ;Чтение EEPROM
+  
+```gcode
+M501 ;Чтение EEPROM
 M300 S200 P100
-</i></pre>
+```
 </details>
 
 <details>
 <summary>BEFORE CONNECTION TO PRINTER IS CLOSED</summary>
-<pre><i>M300 S200 P100
-</i></pre>
+  
+```gcode
+M300 S200 P100
+```
 </details>
 
 - #### Kiosk
-
-<pre>sudo apt -y install --no-install-recommends chromium-browser && \
+```bash
+sudo apt -y install --no-install-recommends chromium-browser && \
 sudo apt -y install getty-run
-</pre>
+```
 
-<pre>sudo nano /lib/systemd/system/getty@.service
+<pre>
+<b>sudo nano /lib/systemd/system/getty@.service</b>
 <i>
 [Service]
 ...
@@ -353,7 +405,8 @@ ExecStart=-/sbin/agetty -a !!!USERNAME!!! --noclear %I $TERM
 <pre>sudo apt -y install --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox
 </pre>
 
-<pre>sudo nano /etc/xdg/openbox/autostart
+<pre>
+<b>sudo nano /etc/xdg/openbox/autostart</b>
 <i>
 # Disable any form of screen saver
 xset s off
@@ -370,17 +423,16 @@ sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/
 chromium-browser --disable-infobars --kiosk 'http://localhost:5000/'
 </i></pre>
 
-<pre>cd && sudo nano .bash_profile
+<pre>
+<b>cd && sudo nano .bash_profile</b>
 <i>
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx
 </i></pre>
 
 - #### Matrix screensaver
 
-<pre>sudo apt -y install cmatrix
-</pre>
-
-<pre>cd && sudo nano .bash_profile
+<pre>
+<b>sudo apt -y install cmatrix && cd && sudo nano .bash_profile</b>
 <i>
 if [ -n "$BASH_VERSION" ]; then
   if [ -f "$HOME/.bashrc" ]; then
@@ -392,13 +444,15 @@ fi
 
 - #### Alias for Kiosk and Matrix
 
-<pre>sudo nano ~/.bash_aliases && source ~/.bashrc
+<pre>
+<b>sudo nano ~/.bash_aliases && source ~/.bashrc</b>
 <i>
 alias ms='cmatrix -s -b'
 alias xs='startx'
 </i></pre>
 
-<pre>sudo nano ~/.bashrc
+<pre>
+<b>sudo nano ~/.bashrc</b>
 <i>
 ...
 if [ -f ~/.bash_aliases ]; then
