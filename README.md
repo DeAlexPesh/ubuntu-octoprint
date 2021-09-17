@@ -68,7 +68,7 @@ pip install OctoPrint
 # python -m pip install --user --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org --upgrade pip
 # python -m pip install --user --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org OctoPrint
 
-exit
+deactivate && exit
 ```
 
 - #### OCTOPRINT actions
