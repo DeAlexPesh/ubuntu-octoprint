@@ -64,9 +64,9 @@ source venv3/bin/activate
 pip install pip --upgrade
 pip install OctoPrint
 
-// curl -LO https://bootstrap.pypa.io/get-pip.py && python get-pip.py --user
-// python -m pip install --user --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org --upgrade pip
-// python -m pip install --user --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org OctoPrint
+# curl -LO https://bootstrap.pypa.io/get-pip.py && python get-pip.py --user
+# python -m pip install --user --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org --upgrade pip
+# python -m pip install --user --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org OctoPrint
 
 exit
 ```
