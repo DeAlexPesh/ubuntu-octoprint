@@ -50,6 +50,22 @@ sudo systemctl restart systemd-logind.service
 
 ```
 - #### OCTOPRINT install ( http://ip:5000 )
+
+```bash
+# Ubuntu 16
+
+sudo apt install build-essential libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev zlib1g -y
+cd /usr/src
+sudo wget https://www.python.org/ftp/python/3.9.9/Python-3.9.9.tgz && \
+sudo tar -xzvf Python-3.9.9.tgz
+cd Python-3.9.9
+./configure --enable-optimizations
+sudo make altinstall
+
+sudo apt -y install virtualenv
+python3.9 -m venv venv3
+```
+
 ```bash
 sudo apt -y install python3-pip python3-dev python3-setuptools python3-virtualenv python3-venv
 
