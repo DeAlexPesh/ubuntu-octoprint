@@ -54,16 +54,19 @@ sudo systemctl restart systemd-logind.service
 ```bash
 # Ubuntu 16
 
-sudo apt install build-essential libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev zlib1g -y
-cd /usr/src
-sudo wget https://www.python.org/ftp/python/3.9.9/Python-3.9.9.tgz && \
-sudo tar -xzvf Python-3.9.9.tgz
-cd Python-3.9.9
-./configure --enable-optimizations
-sudo make altinstall
+sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
+sudo apt -y install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update && \
+sudo apt -y install python3.9 python3.9-distutils
+// sudo apt remove python3.5-minimal -y
+ln -sf /usr/bin/python3.9 /usr/local/bin/python3
 
-sudo apt -y install virtualenv
-python3.9 -m venv venv3
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+python3.9 get-pip.py && \
+rm get-pip.py
+
+which python3 && python3 --version && pip -V
 ```
 
 ```bash
