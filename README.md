@@ -256,7 +256,7 @@ sudo apt -y install snapd
 
 ```bash
 sudo snap install mjpg-streamer && sudo snap connect mjpg-streamer:camera
-sudo apt -y install v4l-utils && v4l2-ctl --list-devices
+sudo apt -y install ffmpeg v4l-utils && v4l2-ctl --list-devices
 ```
 
 <pre>
@@ -272,7 +272,7 @@ LISTEN="127.0.0.1"
 DAEMON="mjpg_streamer"
 case "$1" in
   start)
-    mjpg-streamer -i "input_uvc.so -d $VIDEO -f $FRAMERATE -r $RESOLUTION -yuv" -o "output_http.so -w $MJPG_WEB_ROOT -p $PORT"
+    mjpg-streamer -i "input_uvc.so -d $VIDEO -f $FRAMERATE -r $RESOLUTION -yuv -n -timestamp" -o "output_http.so -w $MJPG_WEB_ROOT -p $PORT"
   ;;
   stop)
     pkill -x ${DAEMON}
