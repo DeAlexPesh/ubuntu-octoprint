@@ -256,7 +256,7 @@ sudo apt -y install snapd
 
 ```bash
 sudo snap install mjpg-streamer && sudo snap connect mjpg-streamer:camera
-sudo apt -y install ffmpeg v4l-utils && v4l2-ctl --list-devices
+sudo apt -y install ffmpeg v4l-utils && sudo v4l2-ctl --list-devices
 ```
 
 <pre>
