@@ -288,6 +288,10 @@ Description=Stream
 After=network.target
 
 [Service]
+CPUWeight=30
+CPUQuota=50%
+IOWeight=30
+MemorySwapMax=0
 ExecStart=/usr/local/bin/stream.sh start
 ExecStop=/usr/local/bin/stream.sh stop
 Restart=on-failure
