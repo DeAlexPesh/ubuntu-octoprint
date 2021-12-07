@@ -264,7 +264,7 @@ sudo apt -y install ffmpeg v4l-utils && sudo v4l2-ctl --list-devices
 <i>
 #!/bin/bash
 RESOLUTION="640x480"
-FRAMERATE="25"
+FRAMERATE="15"
 VIDEO="/dev/video0"
 MJPG_WEB_ROOT="/tmp"
 PORT="8080"
@@ -288,9 +288,9 @@ Description=Stream
 After=network.target
 
 [Service]
-CPUWeight=30
+CPUWeight=50
 CPUQuota=50%
-IOWeight=30
+IOWeight=50
 MemorySwapMax=0
 ExecStart=/usr/local/bin/stream.sh start
 ExecStop=/usr/local/bin/stream.sh stop
