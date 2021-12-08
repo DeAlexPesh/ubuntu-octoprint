@@ -49,7 +49,7 @@ sudo systemctl restart systemd-journald
 sudo apt -y update && sudo apt -y dist-upgrade
 
 sudo apt -y install net-tools wireless-tools network-manager rfkill git libyaml-dev build-essential
-sudo apt -y install virtualbox-guest-additions-iso
+// sudo apt -y install virtualbox-guest-additions-iso
 ```
 
 - #### Wi-Fi drivers
