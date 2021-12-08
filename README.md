@@ -1,3 +1,49 @@
+## Prepare Ubuntu 20 Server
+```bash
+sudo apt update && sudo apt -y dist-upgrade
+
+sudo dpkg-reconfigure cloud-init // deselect all
+
+sudo apt purge cloud-init && \
+sudo rm -rf {/var/lib/cloud,/etc/cloud} && \
+sudo systemctl disable iscsid.service open-iscsi.service && \
+sudo apt remove open-iscsi && \
+sudo systemctl show -p WantedBy network-online.target
+```
+```bash
+sudo mv /etc/netplan/00-installer-config.yaml /etc/netplan/01-netcfg.yaml && \
+sudo nano /etc/netplan/01-netcfg.yaml && \
+sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+#     optional: true
+      dhcp4: true
+      dhcp6: false
+      dhcp-identifier: mac
+```
+```bash
+sudo apt install auditd glances && \
+sudo sed -i "s|-b .*|## \0\n-b 15000|" /etc/audit/rules.d/audit.rules && \
+sudo service auditd restart && sudo auditctl -s && sudo service auditd status
+```
+```bash
+sudo nano /etc/sysctl.conf && sudo sysctl -p
+
+# swappiness
+vm.swappiness=10
+vm.vfs_cache_pressure=1000
+```
+```bash
+sudo systemctl reset-failed && \
+sudo journalctl --rotate && \
+sudo journalctl --vacuum-time=1s && \
+sudo systemctl restart systemd-journald
+```
+
 ## Ubuntu OCTOPRINT (Python3)
 ```bash
 sudo apt -y update && sudo apt -y dist-upgrade
