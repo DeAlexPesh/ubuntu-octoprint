@@ -71,11 +71,22 @@ iwconfig
 nmcli d
 nmcli r wifi on
 nmcli d wifi list
-
+```
+<pre>
+<b>sudo nano /usr/local/bin/wlan-connect.sh && sudo chmod +x /usr/local/bin/wlan-connect.sh</b>
+<i>
+#!/bin/bash
+nmcli d wifi list && \
 read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
+</i></pre>
+
+```bash
+wlan-connect.sh
+
+
 ```
 
 - #### Case settings (notebooks)
