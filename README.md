@@ -102,9 +102,10 @@ sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 </pre>
 
 ```bash
+sudo nano /etc/default/grub && sudo update-grub
+GRUB_CMDLINE_LINUX_DEFAULT="maybe-ubiquity consoleblank=60"
+
 sudo systemctl restart systemd-logind.service
-
-
 ```
 - #### OCTOPRINT install ( http://ip:5000 )
 
