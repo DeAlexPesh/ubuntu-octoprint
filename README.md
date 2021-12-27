@@ -26,6 +26,10 @@ network:
       dhcp-identifier: mac
 ```
 ```bash
+sudo nano /etc/default/grub && sudo update-grub
+GRUB_CMDLINE_LINUX_DEFAULT="... ipv6.disable=1"
+```
+```bash
 sudo apt install auditd glances && \
 sudo sed -i "s|-b .*|## \0\n-b 15000|" /etc/audit/rules.d/audit.rules && \
 sudo service auditd restart && sudo auditctl -s && sudo service auditd status
@@ -36,9 +40,6 @@ sudo nano /etc/sysctl.conf && sudo sysctl -p
 # swappiness
 vm.swappiness=10
 vm.vfs_cache_pressure=1000
-# disable ipv6
-net.ipv6.conf.all.disable_ipv6=1
-net.ipv6.conf.default.disable_ipv6=1
 ```
 ```bash
 sudo systemctl reset-failed && \
@@ -106,7 +107,7 @@ sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 
 ```bash
 sudo nano /etc/default/grub && sudo update-grub
-GRUB_CMDLINE_LINUX_DEFAULT="maybe-ubiquity quiet consoleblank=60"
+GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=60"
 
 sudo systemctl restart systemd-logind.service
 ```
