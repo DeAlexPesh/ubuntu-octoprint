@@ -103,12 +103,14 @@ sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 <pre>
 <b>sudo nano /etc/systemd/logind.conf</b>
 
+<i># do nothing then noteboock is closed</i>
 <i>HandleLidSwitch=ignore</i>
 </pre>
 
 ```bash
+# set period backlight is off (sec)
 sudo nano /etc/default/grub && sudo update-grub
-GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=60"
+GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=10"
 
 sudo systemctl restart systemd-logind.service
 ```
