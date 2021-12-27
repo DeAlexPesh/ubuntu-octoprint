@@ -326,11 +326,11 @@ sudo apt -y install ffmpeg v4l-utils && sudo v4l2-ctl --list-devices
 <i>
 #!/bin/bash
 RESOLUTION="640x480"
-FRAMERATE="15"
+FRAMERATE="25"
 VIDEO="/dev/video0"
 MJPG_WEB_ROOT="/tmp"
 PORT="8080"
-LISTEN="127.0.0.1"
+LISTEN="0.0.0.0"
 DAEMON="mjpg_streamer"
 case "$1" in
   start)
