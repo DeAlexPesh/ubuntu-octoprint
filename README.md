@@ -26,6 +26,7 @@ network:
       dhcp-identifier: mac
 ```
 ```bash
+# if need disabled IPv6
 sudo nano /etc/default/grub && sudo update-grub
 GRUB_CMDLINE_LINUX_DEFAULT="... ipv6.disable=1"
 ```
