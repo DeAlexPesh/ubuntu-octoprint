@@ -17,12 +17,12 @@ sudo netplan apply
 
 network:
   version: 2
-  renderer: networkd
+# renderer: networkd
   ethernets:
     enp0s3:
 #     optional: true
       dhcp4: true
-      dhcp6: false
+#     dhcp6: false
       dhcp-identifier: mac
 ```
 ```bash
@@ -36,6 +36,9 @@ sudo nano /etc/sysctl.conf && sudo sysctl -p
 # swappiness
 vm.swappiness=10
 vm.vfs_cache_pressure=1000
+# disable ipv6
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
 ```
 ```bash
 sudo systemctl reset-failed && \
