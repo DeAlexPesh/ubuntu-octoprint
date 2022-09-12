@@ -57,6 +57,12 @@ sudo apt -y install net-tools wireless-tools network-manager rfkill git libyaml-
 // sudo apt -y install virtualbox-guest-additions-iso
 ```
 
+- #### AMD drivers
+```bash
+sudo add-apt-repository ppa:oibaf/graphics-drivers
+sudo apt update && sudo apt dist-upgrade -qy
+```
+
 - #### Wi-Fi drivers
 ```bash
 lspci -knn | grep Net -A2
