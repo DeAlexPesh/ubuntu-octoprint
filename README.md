@@ -78,6 +78,11 @@ sudo modprobe btbcm
 sudo modprobe rfcomm
 sudo modprobe r8723bs
 
+# Intel ACPI
+grep '' /sys/firmware/acpi/interrupts/*
+crontab -e
+@reboot echo "disable" > /sys/firmware/acpi/interrupts/gpe??
+
 sudo rfkill list all 
 sudo rfkill unblock all
 
@@ -138,7 +143,7 @@ sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 ```bash
 # set period backlight is off (sec)
 sudo nano /etc/default/grub && sudo update-grub
-GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=300 acpi=off"
+GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=300 acpi=strict"
 
 sudo systemctl restart systemd-logind.service
 ```
