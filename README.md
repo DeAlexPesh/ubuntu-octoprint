@@ -71,8 +71,8 @@ sudo update-pciids
 # BCM4312
 sudo apt install firmware-b43-installer -y && sudo reboot now
 
-# RTL8723BS
-dmesg | egrep -i -e "8723|blue|rfcomm|hci|mmc|rtl"
+# RTL8723BS + Intel
+sudo apt install i2c-tools
 sudo modprobe hidp
 sudo modprobe btbcm
 sudo modprobe rfcomm
@@ -99,6 +99,22 @@ read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
+</i>
+
+<i>
+#!/bin/bash
+sudo wpa_cli -i wlan0 SCAN && \
+sudo wpa_cli -i wlan0 SCAN_RESULTS && \
+read -er -p 'SSID: ' WSSID && \
+read -er -p 'PASS: ' WPASS && \
+N = sudo wpa_cli -i wlan0 ADD_NETWORK && \
+sudo wpa_cli -i wlan0 SET_NETWORK $N ssid "$WSSID" && \
+sudo wpa_cli -i wlan0 SET_NETWORK $N psk "$WPASS" && \
+sudo wpa_cli -i wlan0 ENABLE_NETWORK $N && \
+dhcpcd wlan0
+
+# sudo wpa_cli -i wlan0 LIST_NETWORKS
+# sudo wpa_cli -i wlan0 REMOVE_NETWORK $N
 </i></pre>
 
 ```bash
