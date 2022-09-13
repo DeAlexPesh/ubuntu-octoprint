@@ -31,7 +31,7 @@ sudo nano /etc/default/grub && sudo update-grub
 GRUB_CMDLINE_LINUX_DEFAULT="... ipv6.disable=1"
 ```
 ```bash
-sudo apt install auditd glances && \
+sudo apt install auditd glances bpytop bashtop && \
 sudo sed -i "s|-b .*|## \0\n-b 15000|" /etc/audit/rules.d/audit.rules && \
 sudo service auditd restart && sudo auditctl -s && sudo service auditd status
 ```
