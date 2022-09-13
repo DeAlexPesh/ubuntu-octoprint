@@ -138,7 +138,7 @@ sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 ```bash
 # set period backlight is off (sec)
 sudo nano /etc/default/grub && sudo update-grub
-GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=300 acpi=strict"
+GRUB_CMDLINE_LINUX_DEFAULT="... quiet consoleblank=300 acpi=off"
 
 sudo systemctl restart systemd-logind.service
 ```
