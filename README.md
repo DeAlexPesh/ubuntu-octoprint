@@ -76,6 +76,7 @@ dmesg | egrep -i -e "8723|blue|rfcomm|hci|mmc|rtl"
 sudo modprobe hidp
 sudo modprobe btbcm
 sudo modprobe rfcomm
+sudo modprobe r8723bs
 
 sudo rfkill list all 
 sudo rfkill unblock all
