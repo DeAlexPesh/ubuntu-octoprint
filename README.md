@@ -71,6 +71,12 @@ sudo update-pciids
 # BCM4312
 sudo apt install firmware-b43-installer -y && sudo reboot now
 
+# RTL8723BS
+dmesg | egrep -i -e "8723|blue|rfcomm|hci|mmc|rtl"
+sudo modprobe hidp
+sudo modprobe btbcm
+sudo modprobe rfcomm
+
 sudo rfkill list all 
 sudo rfkill unblock all
 
