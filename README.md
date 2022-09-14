@@ -92,6 +92,10 @@ iwconfig
 ```bash
 # cat /sys/class/power_supply/axp288_fuel_gauge/capacity
 upower -i $(upower -e | grep 'battery' || 'BAT') | grep -E "state|to\ full|percentage"
+
+sudo apt install acpi
+acpi -help
+acpi -b | grep -oP "(\d+(\.\d+)?(?=%))"   // battery status
 ```
 
 - #### Wi-Fi connection
