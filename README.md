@@ -88,6 +88,11 @@ sudo rfkill unblock all
 
 iwconfig
 ```
+- #### Buttery
+```bash
+# cat /sys/class/power_supply/axp288_fuel_gauge/capacity
+upower -i $(upower -e | grep 'battery' || 'BAT') | grep -E "state|to\ full|percentage"
+```
 
 - #### Wi-Fi connection
 ```bash
