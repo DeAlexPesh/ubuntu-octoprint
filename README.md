@@ -141,6 +141,7 @@ network:
         SSID:
           password: "PASS"
       dhcp4: true
+      dhcp-identifier: mac
 </i></pre>
 
 ```bash
