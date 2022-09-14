@@ -73,21 +73,14 @@ sudo apt install firmware-b43-installer -y && sudo reboot now
 
 # RTL8723BS + Intel
 sudo apt install i2c-tools
-sudo modprobe hidp
-sudo modprobe btbcm
-sudo modprobe rfcomm
 sudo modprobe r8723bs
-
-# Intel ACPI
-grep '' /sys/firmware/acpi/interrupts/*
-crontab -e
-@reboot echo "disable" > /sys/firmware/acpi/interrupts/gpe??
 
 sudo rfkill list all 
 sudo rfkill unblock all
 
 iwconfig
 ```
+
 - #### Buttery
 ```bash
 # cat /sys/class/power_supply/axp288_fuel_gauge/capacity
@@ -96,6 +89,18 @@ upower -i $(upower -e | grep 'battery' || 'BAT') | grep -E "state|to\ full|perce
 sudo apt install acpi
 acpi -help
 acpi -b | grep -oP "(\d+(\.\d+)?(?=%))"   // battery status
+
+# Intel ACPI
+grep '' /sys/firmware/acpi/interrupts/*
+crontab -e
+@reboot echo "disable" > /sys/firmware/acpi/interrupts/gpe??
+```
+
+- #### Screen
+```bash
+sudo apt install intel-gpu-tools
+sudo nano /sys/class/backlight/intel_backlight/brightness
+10
 ```
 
 - #### Wi-Fi connection
@@ -113,29 +118,15 @@ read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
-</i></pre>
+</i>
+<b>wlan-connect.sh</b>
+</pre>
 
-<pre>
-<b>sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-ctrl_interface=/run/wpa_supplicant
-update_config=1
-
-sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
-sudo nano /usr/local/bin/wlan-connect.sh && sudo chmod +x /usr/local/bin/wlan-connect.sh</b>
-<i>
-#!/bin/bash
-sudo wpa_cli -i wlan0 SCAN && \
-sudo wpa_cli -i wlan0 SCAN_RESULTS && \
-read -er -p 'SSID: ' WSSID && \
-read -er -p 'PASS: ' WPASS && \
-N=$(sudo wpa_cli -i wlan0 ADD_NETWORK) && \
-sudo wpa_cli -i wlan0 SET_NETWORK $N ssid "\"$WSSID\"" && \
-sudo wpa_cli -i wlan0 SET_NETWORK $N psk "\"$WPASS\"" && \
-sudo wpa_cli -i wlan0 ENABLE_NETWORK $N && \
-sudo wpa_cli -i wlan0 SAVE_CONFIG
+<pre><i>
+# sudo wpa_cli -i wlan0 SCAN && \
+# sudo wpa_cli -i wlan0 SCAN_RESULTS
 
 # sudo wpa_cli -i wlan0 LIST_NETWORKS
-# sudo wpa_cli -i wlan0 REMOVE_NETWORK $N
 </i></pre>
 
 <pre>
@@ -162,14 +153,9 @@ sudo chmod 700 /etc/pm/power.d/wireless_power_management_off
 #!/bin/bash
 /sbin/iwconfig wlan0 power off
 
-sudo crontab -e
-*/1 * * * * /etc/pm/power.d/wireless_power_management_off
-
 sudo nano /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
 [connection]
 wifi.powersave = 2
-
-wlan-connect.sh
 ```
 
 - #### Case settings (notebooks)
