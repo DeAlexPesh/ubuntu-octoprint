@@ -120,9 +120,9 @@ sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
 </i>
 <b>wlan-connect.sh</b>
-</pre>
+<i>
+sudo lshw -C network
 
-<pre><i>
 # sudo wpa_cli -i wlan0 SCAN && \
 # sudo wpa_cli -i wlan0 SCAN_RESULTS
 
@@ -145,8 +145,6 @@ network:
 </i></pre>
 
 ```bash
-sudo lshw -C network
-
 sudo nano /etc/pm/power.d/wireless_power_management_off && \
 sudo chown root:root /etc/pm/power.d/wireless_power_management_off && \
 sudo chmod 700 /etc/pm/power.d/wireless_power_management_off
