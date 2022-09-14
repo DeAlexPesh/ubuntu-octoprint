@@ -155,7 +155,16 @@ network:
 
 ```bash
 sudo lshw -C network
-# sudo iwconfig wlan0 power off
+
+sudo nano /etc/pm/power.d/wireless_power_management_off && \
+sudo chown root:root /etc/pm/power.d/wireless_power_management_off && \
+sudo chmod 700 /etc/pm/power.d/wireless_power_management_off
+#!/bin/bash
+/sbin/iwconfig wlan0 power off
+
+sudo crontab -e
+*/1 * * * * /etc/pm/power.d/wireless_power_management_off
+
 sudo nano /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
 [connection]
 wifi.powersave = 2
