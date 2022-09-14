@@ -129,6 +129,18 @@ sudo wpa_cli -i wlan0 SAVE_CONFIG
 # sudo wpa_cli -i wlan0 REMOVE_NETWORK $N
 </i></pre>
 
+<pre>
+<b>sudo nano /etc/netplan/00-*-wifi.yaml</b>
+<i>
+network:
+  version: 2
+  wifis:
+    wlan0:
+      access-points:
+        SSID:
+          password: PASS
+</i></pre>
+
 ```bash
 wlan-connect.sh
 
