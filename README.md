@@ -154,8 +154,11 @@ network:
 </i></pre>
 
 ```bash
-wlan-connect.sh
+sudo apt install iw && \
+iw dev wlan0 set power_save off && \
+sudo iwconfig wlan0 power off
 
+wlan-connect.sh
 
 ```
 
