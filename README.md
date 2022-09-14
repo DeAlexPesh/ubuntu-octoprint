@@ -130,7 +130,8 @@ sudo wpa_cli -i wlan0 SAVE_CONFIG
 </i></pre>
 
 <pre>
-<b>sudo nano /etc/netplan/00-*-wifi.yaml</b>
+<b>sudo nano /etc/netplan/00-*-wifi.yaml && \
+sudo netplan apply</b>
 <i>
 network:
   version: 2
@@ -138,7 +139,8 @@ network:
     wlan0:
       access-points:
         SSID:
-          password: PASS
+          password: "PASS"
+      dhcp4: true
 </i></pre>
 
 ```bash
