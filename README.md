@@ -154,12 +154,13 @@ network:
 </i></pre>
 
 ```bash
-sudo apt install iw && \
-iw dev wlan0 set power_save off && \
-sudo iwconfig wlan0 power off
+sudo lshw -C network
+# sudo iwconfig wlan0 power off
+sudo nano /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+[connection]
+wifi.powersave = 2
 
 wlan-connect.sh
-
 ```
 
 - #### Case settings (notebooks)
