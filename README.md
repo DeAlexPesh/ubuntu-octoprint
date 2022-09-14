@@ -104,8 +104,15 @@ read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
-</i>
+</i></pre>
 
+<pre>
+<b>sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=/run/wpa_supplicant
+update_config=1
+
+sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+sudo nano /usr/local/bin/wlan-connect.sh && sudo chmod +x /usr/local/bin/wlan-connect.sh</b>
 <i>
 #!/bin/bash
 sudo wpa_cli -i wlan0 SCAN && \
@@ -115,7 +122,8 @@ read -er -p 'PASS: ' WPASS && \
 N=$(sudo wpa_cli -i wlan0 ADD_NETWORK) && \
 sudo wpa_cli -i wlan0 SET_NETWORK $N ssid "\"$WSSID\"" && \
 sudo wpa_cli -i wlan0 SET_NETWORK $N psk "\"$WPASS\"" && \
-sudo wpa_cli -i wlan0 ENABLE_NETWORK $N
+sudo wpa_cli -i wlan0 ENABLE_NETWORK $N && \
+sudo wpa_cli -i wlan0 SAVE_CONFIG
 
 # sudo wpa_cli -i wlan0 LIST_NETWORKS
 # sudo wpa_cli -i wlan0 REMOVE_NETWORK $N
