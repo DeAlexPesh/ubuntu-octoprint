@@ -106,7 +106,8 @@ upower -i $(upower -e | grep 'battery' || 'BAT') | grep -E "state|to\ full|perce
 sudo nano /bin/charge && \
 sudo chmod +x /bin/charge
 #!/bin/bash
-acpi -b | grep -oP "(\d+(\.\d+)?(?=%))"
+CH=$(acpi -b | grep -oP "(\d+(\.\d+)?(?=%))")
+echo "$CH%"
 
 # Intel ACPI Intrrupts
 grep '' /sys/firmware/acpi/interrupts/*
