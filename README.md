@@ -141,6 +141,12 @@ sudo wpa_cli -i wlan0 SCAN && \
 sudo wpa_cli -i wlan0 SCAN_RESULTS
 
 sudo wpa_cli -i wlan0 LIST_NETWORKS
+```
+- #### Case settings (notebooks)
+```bash
+# man logind.conf 
+sudo apt -y install pm-utils && \
+sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 
 # Wlan powersave off
 sudo nano /etc/pm/power.d/wireless_power_management_off && \
@@ -152,12 +158,6 @@ sudo chmod 700 /etc/pm/power.d/wireless_power_management_off
 sudo nano /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
 [connection]
 wifi.powersave = 2
-```
-- #### Case settings (notebooks)
-```bash
-# man logind.conf 
-sudo apt -y install pm-utils && \
-sudo cp /etc/systemd/logind.conf /etc/systemd/logind.conf.back
 ```
 <pre>
 <b>sudo nano /etc/systemd/logind.conf</b>
