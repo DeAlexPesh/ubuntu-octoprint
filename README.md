@@ -76,6 +76,13 @@ sudo add-apt-repository ppa:oibaf/graphics-drivers
 sudo apt update && sudo apt dist-upgrade -qy
 ```
 
+- #### Intel drivers
+```bash
+sudo add-apt-repository ppa:sundar-nagarajan/cherrytux
+sudo apt update && sudo apt dist-upgrade -qy
+sudo apt install -qy intel-gpu-tools
+```
+
 - #### Wi-Fi drivers
 ```bash
 lspci -knn | grep Net -A2
@@ -83,9 +90,6 @@ sudo update-pciids
 
 # BCM4312
 sudo apt install firmware-b43-installer -y && sudo reboot now
-
-# intel
-sudo add-apt-repository ppa:sundar-nagarajan/cherrytux
 
 sudo rfkill list all 
 sudo rfkill unblock all
@@ -108,7 +112,6 @@ crontab -e
 
 - #### Screen
 ```bash
-sudo apt install -qy intel-gpu-tools
 sudo bash -c 'echo "10" > /sys/class/backlight/intel_backlight/brightness'
 ```
 
