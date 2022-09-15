@@ -17,12 +17,25 @@ sudo netplan apply
 
 network:
   version: 2
-# renderer: networkd
   ethernets:
     enp0s3:
 #     optional: true
       dhcp4: true
-#     dhcp6: false
+      dhcp-identifier: mac
+```
+```bash
+sudo nano /etc/netplan/00-...-wifi.yaml && \
+sudo netplan apply
+
+network:
+  version: 2
+  wifis:
+    wlan0:
+#     optional: true
+      access-points:
+        SSID:
+          password: "PASS"
+      dhcp4: true
       dhcp-identifier: mac
 ```
 ```bash
@@ -53,7 +66,7 @@ sudo systemctl restart systemd-journald
 ```bash
 sudo apt -y update && sudo apt -y dist-upgrade
 
-sudo apt -y install net-tools wireless-tools network-manager rfkill git libyaml-dev build-essential
+sudo apt -y install net-tools wireless-tools network-manager rfkill git libyaml-dev build-essential i2c-tools acpi
 // sudo apt -y install virtualbox-guest-additions-iso
 ```
 
@@ -71,10 +84,6 @@ sudo update-pciids
 # BCM4312
 sudo apt install firmware-b43-installer -y && sudo reboot now
 
-# RTL8723BS + Intel
-sudo apt install i2c-tools
-sudo modprobe r8723bs
-
 sudo rfkill list all 
 sudo rfkill unblock all
 
@@ -83,28 +92,27 @@ iwconfig
 
 - #### Buttery
 ```bash
+# Battery status
 # cat /sys/class/power_supply/axp288_fuel_gauge/capacity
 upower -i $(upower -e | grep 'battery' || 'BAT') | grep -E "state|to\ full|percentage"
+acpi -b | grep -oP "(\d+(\.\d+)?(?=%))"
 
-sudo apt install acpi
-acpi -help
-acpi -b | grep -oP "(\d+(\.\d+)?(?=%))"   // battery status
-
-# Intel ACPI
+# Intel ACPI Intrrupts
 grep '' /sys/firmware/acpi/interrupts/*
 crontab -e
-@reboot echo "disable" > /sys/firmware/acpi/interrupts/gpe??
+@reboot echo "disable" > /sys/firmware/acpi/interrupts/gpe(?)
 ```
 
 - #### Screen
 ```bash
-sudo apt install intel-gpu-tools
-sudo nano /sys/class/backlight/intel_backlight/brightness
-10
+sudo apt install -qy intel-gpu-tools
+sudo bash -c 'echo "10" > /sys/class/backlight/intel_backlight/brightness'
 ```
 
 - #### Wi-Fi connection
 ```bash
+sudo lshw -C network
+
 nmcli d
 nmcli r wifi on
 nmcli d wifi list
@@ -120,31 +128,15 @@ sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
 nmcli d
 </i>
 <b>wlan-connect.sh</b>
-<i>
-sudo lshw -C network
-
-# sudo wpa_cli -i wlan0 SCAN && \
-# sudo wpa_cli -i wlan0 SCAN_RESULTS
-
-# sudo wpa_cli -i wlan0 LIST_NETWORKS
-</i></pre>
-
-<pre>
-<b>sudo nano /etc/netplan/00-*-wifi.yaml && \
-sudo netplan apply</b>
-<i>
-network:
-  version: 2
-  wifis:
-    wlan0:
-      access-points:
-        SSID:
-          password: "PASS"
-      dhcp4: true
-      dhcp-identifier: mac
-</i></pre>
-
+</pre>
 ```bash
+# Old Wlan card
+sudo wpa_cli -i wlan0 SCAN && \
+sudo wpa_cli -i wlan0 SCAN_RESULTS
+
+sudo wpa_cli -i wlan0 LIST_NETWORKS
+
+# Wlan powersave off
 sudo nano /etc/pm/power.d/wireless_power_management_off && \
 sudo chown root:root /etc/pm/power.d/wireless_power_management_off && \
 sudo chmod 700 /etc/pm/power.d/wireless_power_management_off
@@ -155,7 +147,6 @@ sudo nano /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
 [connection]
 wifi.powersave = 2
 ```
-
 - #### Case settings (notebooks)
 ```bash
 # man logind.conf 
