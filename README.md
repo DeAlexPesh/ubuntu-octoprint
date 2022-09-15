@@ -102,6 +102,10 @@ iwconfig
 # Battery status
 # cat /sys/class/power_supply/axp288_fuel_gauge/capacity
 upower -i $(upower -e | grep 'battery' || 'BAT') | grep -E "state|to\ full|percentage"
+
+sudo nano /bin/charge && \
+sudo chmod +x /bin/charge
+#!/bin/bash
 acpi -b | grep -oP "(\d+(\.\d+)?(?=%))"
 
 # Intel ACPI Intrrupts
