@@ -24,7 +24,7 @@ network:
       dhcp-identifier: mac
 ```
 ```bash
-sudo nano /etc/netplan/00-...-wifi.yaml && \
+sudo nano /etc/netplan/00-installer-config-wifi.yaml && \
 sudo netplan apply
 
 network:
@@ -83,6 +83,9 @@ sudo update-pciids
 
 # BCM4312
 sudo apt install firmware-b43-installer -y && sudo reboot now
+
+# intel
+sudo add-apt-repository ppa:sundar-nagarajan/cherrytux
 
 sudo rfkill list all 
 sudo rfkill unblock all
