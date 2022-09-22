@@ -132,7 +132,7 @@ nmcli d wifi list
 <b>sudo nano /usr/local/bin/wlan-connect.sh && sudo chmod +x /usr/local/bin/wlan-connect.sh</b>
 <i>
 #!/bin/bash
-nmcli d wifi list && \
+nmcli -f in-use,ssid,bssid,signal,bars dev wifi && \
 read -er -p 'SSID: ' WSSID && \
 read -er -p 'PASS: ' WPASS && \
 sudo nmcli d wifi connect "$WSSID" password "$WPASS" && \
