@@ -441,18 +441,50 @@ octo ALL=NOPASSWD:/usr/sbin/service stream stop
 </i></pre>
 
 <pre>
+<b>sudo apt install jq</b>
+<b>sudo nano /usr/local/bin/opower.sh && sudo chmod +x /usr/local/bin/opower.sh</b>
+<i>
+#!/bin/bash
+XDOM="http://192.168.0.0"
+XNAME="admin"
+XPASS="admin"
+XURL="$XDOM/cm?user=$XNAME&password=$XPASS&cmnd="
+if [ -z "$1" ]; then
+  echo 'Need arguments!'
+  exit 1
+fi
+xhr() {
+  echo "$(curl ${XURL}${1} -s -H 'Accept: application/json' | jq '.POWER')"
+}
+RES=$(xhr "POWER")
+if [[ ${RES,,} != *"${1,,}"* ]]; then
+  echo xhr "POWER%20${1^^}"
+else
+  echo "Already ${1^^}..."
+fi
+</i></pre>
+
+<pre>
 <b>sudo nano /opt/octoprint/.octoprint/config.yaml</b>
 <i>
 system:
   actions:
-  - name: Camera enable
-    action: Camera enable
+  - name: CAMERA ENABLE
+    action: CAMERA ENABLE
     command: sudo service stream start
     confirm: false
-  - name: Camera disable
-    action: Camera disable
+  - name: CAMERA DISABLE
+    action: CAMERA DISABLE
     command: sudo service stream stop
     confirm: false
+  - name: POWER ON
+    action: POWER ON
+    command: /usr/local/bin/opower.sh on
+    confirm: false
+  - name: POWER OFF
+    action: POWER OFF
+    command: /usr/local/bin/opower.sh off
+    confirm: true
 </i></pre>
 
 ```bash
