@@ -458,7 +458,7 @@ xhr() {
 }
 RES=$(xhr "POWER")
 if [[ ${RES,,} != *"${1,,}"* ]]; then
-  echo xhr "POWER%20${1^^}"
+  xhr "POWER%20${1^^}"
 else
   echo "Already ${1^^}..."
 fi
