@@ -207,9 +207,13 @@ sudo usermod -a -G dialout octoprint && \
 sudo su - octoprint
 ```
 ```python
-virtualenv --python=/usr/bin/python3 venv3
+sudo apt update
+sudo apt install python3.9 python3.9-venv
+
+virtualenv --python=/usr/bin/python3.9 venv3
 source venv3/bin/activate
 pip install pip --upgrade
+pip install --upgrade setuptools
 pip install OctoPrint
 
 # curl -LO https://bootstrap.pypa.io/get-pip.py && python get-pip.py --user
